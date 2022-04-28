@@ -97,9 +97,6 @@ Allowed params:
 * year :: Integer 
 
 
-## Design
-
-![imagen](https://user-images.githubusercontent.com/15184360/69903207-f97d9300-1396-11ea-9082-79a6a9dc74de.png)
 
 In order to manage disbursements, I created `Disbursement` model.
 
