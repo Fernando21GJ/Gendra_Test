@@ -106,22 +106,7 @@ It contains:
 * week
 * year
 
-It is also related with orders. In this way, we can get information about all the orders related with a disbursement. Additionaly, we can use it to know from `completed` orders, which of them are already processed (`not_disbursed` scope in `Order` model).
-
-The hearth of this development is in `Disbursement.process` function.
-
-Firstly, it iterates over merchants and try to create or find a new disbursement. In case of create a new one, year and week are set from current date.
-
-In order to avoid edge cases where two processes tried to create a new disbursement, `merchant_id`, `year` and `week` have a unique index and in this case an exception will be thrown and `retry` will be performed (and finally the record will be found).
-
-Once I have the disbursement record, I iterate in batches across orders, filtering by each merchant and returning completed and not disbursed orders.
-
-After that, I use a transaction to calculate and update the disbursement amount and mark all orders as part of this disbursement. This transaction allows us to be sure that an order won't be processed twice (at least in a not distributed database).
-
-To calculate the fees, I've included a method `net_amount` in `Order` model that permit us to know the final disbursement for this orderd. This method is called when I'm iterating in batches in the reduce function to calculate the total sum:
-
-```ruby
-amount = orders.reduce(disbursement.amount) { |current_amount, order| current_amount + order.net_amount }
+I
 ```
 
 Also, I decided to use decimal instead of floats type to have more precission since, I don't know how decimals are treated in real cases.
